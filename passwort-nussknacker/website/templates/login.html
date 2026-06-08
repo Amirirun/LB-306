@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}Login{% endblock %}
+{% block content %}
+<h1>Login</h1>
+<form id="login-form">
+  <label>E-Mail
+    <input type="email" name="email" required>
+  </label>
+  <label>Passwort
+    <input type="password" name="password" required>
+  </label>
+  <button type="submit">Anmelden</button>
+</form>
+<p id="msg"></p>
+<p><a href="/register">Noch kein Konto? Registrieren</a></p>
+<script>
+document.getElementById("login-form").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const res = await fetch("/login", { method: "POST", body: new FormData(e.target) });
+  const data = await res.json();
+  const msg = document.getElementById("msg");
+  msg.textContent = res.ok ? (data.message || "OK") : (data.error || "Fehler");
+  msg.className = res.ok ? "ok" : "err";
+});
+</script>
+{% endblock %}

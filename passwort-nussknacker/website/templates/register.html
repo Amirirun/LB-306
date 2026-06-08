@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}Registrieren{% endblock %}
+{% block content %}
+<h1>Registrieren</h1>
+<form id="register-form">
+  <label>E-Mail
+    <input type="email" name="email" required>
+  </label>
+  <label>Passwort
+    <input type="password" name="password" required>
+  </label>
+  <button type="submit">Konto erstellen</button>
+</form>
+<p id="msg"></p>
+<p><a href="/login">Zurueck zum Login</a></p>
+<script>
+document.getElementById("register-form").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const res = await fetch("/register", { method: "POST", body: new FormData(e.target) });
+  const data = await res.json();
+  const msg = document.getElementById("msg");
+  msg.textContent = res.ok ? (data.message || "OK") : (data.error || "Fehler");
+  msg.className = res.ok ? "ok" : "err";
+});
+</script>
+{% endblock %}
